@@ -1,0 +1,35 @@
+---
+layout: post
+title: Just trying to test a few markdown things this morning.
+published: true
+---
+<h1>Markdown Test</h1>
+
+<p>This is a test to see if markdown works as <em>planned.</em></p>
+
+<p>All of this should be in a separate paragraph.</p>
+
+<h2>Lists</h2>
+
+<ol>
+<li>Lists should be relatively straightforward</li>
+<li>Just number your lists.
+
+<ul>
+<li>Sublists should work just as easily.</li>
+<li>Just remember to indent</li>
+</ul>
+</li>
+<li>One final number.</li>
+</ol>
+
+
+<h2>Code Stuff</h2>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="keyword">import</span> <span class="include">re</span>
+re.search(<span class="string"><span class="modifier">r</span><span class="delimiter">&quot;</span><span class="content">(?&lt;!Failed)</span><span class="content">\b</span><span class="content">Test</span><span class="content">\b</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a </span><span class="delimiter">&quot;</span></span> + \
+           <span class="string"><span class="delimiter">&quot;</span><span class="content">{0}test.</span><span class="delimiter">&quot;</span></span>.format(
+               <span class="string"><span class="delimiter">&quot;</span><span class="content">failed </span><span class="delimiter">&quot;</span></span> <span class="keyword">if</span> test.fail <span class="keyword">else</span> <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
+           , re.I)</pre></div>
+</div>

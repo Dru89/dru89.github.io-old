@@ -1,0 +1,159 @@
+---
+layout: post
+title: My interpretation on how to get the powerset of a set using Ruby and recursive
+  generators. (Now 35x faster)
+published: true
+---
+<p><strong>Problem statement.</strong> Write a computer program in the language of your choice which reads in a single non-negative integer <code>N</code> as input and produces as output the <strong>power set</strong> of
+<code>{1, 2, 3, ..., N}</code>, written one subset per output line. For example, if <code>N=4</code>, your output should look something like:</p>
+
+<p><code>{ 1 2 3 4 }</code><br />
+<code>{ 1 2 3 }</code><br />
+<code>{ 1 2 4 }</code><br />
+<code>{ 1 2 }</code><br />
+<code>{ 1 3 4 }</code><br />
+<code>{ 1 3 }</code><br />
+<code>{ 1 4 }</code><br />
+<code>{ 1 }</code><br />
+<code>{ 2 3 4 }</code><br />
+<code>{ 2 3 }</code><br />
+<code>{ 2 4 }</code><br />
+<code>{ 2 }</code><br />
+<code>{ 3 4 }</code><br />
+<code>{ 3 }</code><br />
+<code>{ 4 }</code><br />
+<code>{ }</code></p>
+
+<p>The order of the listing is unimportant; the example above suggests one possible natural ordering but there are other natural orderings too.  Hand in a hard-copy of your source code, and hard-copy of the output of your program produces for <code>N=5</code></p>
+
+<p><strong>Solution:</strong> I decided that the nicest and easiest to read way to implement this would be with generator functions in Ruby.  Anyways, here&rsquo;s the following code that I came up with.  Tell me what you think.
+By the way, yes I know that Ruby Arrays have a built in <a href="http://www.ruby-doc.org/core/classes/Array.html#M000288" title="Array#combination">combination</a> function, but I felt like that was cheating for this project.  So I implemented it myself.</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="keyword">module</span> <span class="class">Enumerable</span>
+  <span class="keyword">def</span> <span class="function">choose</span> n
+    <span class="keyword">if</span> block_given?
+      a = <span class="predefined-constant">self</span>.to_a
+      <span class="keyword">yield</span> [] <span class="keyword">if</span> n &gt; a.length <span class="keyword">or</span> n &lt; <span class="integer">0</span>
+      <span class="keyword">yield</span> [] <span class="keyword">if</span> n == <span class="integer">0</span>
+      a.each.with_index { |v,i|
+        a[(i+<span class="integer">1</span>)..<span class="integer">-1</span>].choose(n-<span class="integer">1</span>) { |x|
+          <span class="keyword">yield</span> [v] + x \
+            <span class="keyword">if</span> x.length == n-<span class="integer">1</span>
+        }  
+      }
+      <span class="predefined-constant">self</span>
+    <span class="keyword">else</span>
+      combinations = []
+      <span class="predefined-constant">self</span>.choose(n) <span class="keyword">do</span> |c|
+        combinations &lt;&lt; c
+      <span class="keyword">end</span>
+      combinations
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">powerset</span>
+    <span class="keyword">unless</span> block_given?
+      sets = []
+      <span class="integer">0</span>.upto <span class="predefined-constant">self</span>.to_a.length <span class="keyword">do</span> |i|
+        sets += <span class="predefined-constant">self</span>.choose i
+      <span class="keyword">end</span>
+      sets
+    <span class="keyword">else</span>
+      <span class="integer">0</span>.upto <span class="predefined-constant">self</span>.to_a.length <span class="keyword">do</span> |i|
+        <span class="predefined-constant">self</span>.choose(i) <span class="keyword">do</span> |set|
+          <span class="keyword">yield</span> set
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> <span class="predefined-constant">__FILE__</span> == <span class="global-variable">$0</span>
+  <span class="keyword">begin</span>
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">Pick a number to get the power set of (1..n).</span><span class="delimiter">&quot;</span></span>
+    print <span class="string"><span class="delimiter">&quot;</span><span class="content">n=</span><span class="delimiter">&quot;</span></span>
+    n = gets.chomp.to_i
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="content">The powerset of </span><span class="inline"><span class="inline-delimiter">#{</span>(<span class="integer">1</span>..n).to_a<span class="inline-delimiter">}</span></span><span class="content"> is:</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+    t1 = <span class="constant">Time</span>.now
+    (<span class="integer">1</span>..n).powerset <span class="keyword">do</span> |set|
+      puts <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span>set<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+    <span class="keyword">end</span>
+    t2 = <span class="constant">Time</span>.now
+    puts <span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="char">\n</span><span class="content">Size: </span><span class="inline"><span class="inline-delimiter">#{</span><span class="integer">2</span>**n<span class="inline-delimiter">}</span></span><span class="char">\n</span><span class="content">This operation took </span><span class="inline"><span class="inline-delimiter">#{</span>(t2 - t1)*<span class="integer">1000</span><span class="inline-delimiter">}</span></span><span class="content"> </span><span class="delimiter">&quot;</span></span>\
+         <span class="string"><span class="delimiter">&quot;</span><span class="content">milliseconds</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">end</span> <span class="keyword">until</span> n == <span class="integer">0</span>
+<span class="keyword">end</span></pre></div>
+</div>
+
+
+<p>Not surprisingly, since |P(A)| = 2<sup>|P(A)|,</sup> This code runs at ~O(2<sup>n).</sup> Anyways, tell me what you think.  Especially if you see ways to improve.</p>
+
+<p>Also, I plan to add comments to my code very soon, so never fear.</p>
+
+<p>Finally, soon I have another interesting project that&rsquo;s nearing its completion that I
+plan on open-sourcing (actually I already did, but I&rsquo;ll mention it later, running late for class)</p>
+
+<h1>EDIT</h1>
+
+<p>So I came up with a better solution to my powerset algorithm, and it calculates (1..20).powerset in less than 2 seconds.  Anyways, here is the math I based it on.</p>
+
+{% raw %}
+<p>Consider a set A[0] = {}.  Then P(A[0]) = {{}}.  Now consider A[1] = {1}.  Then P(A[1]) = {{}, {1}}.  Then we have that A[1] = A[0] U {1} (where U is a binary operation defined
+as the union of the two sets).  And that P(A[1]) = P(A[0]) U (P(A[0]) + 1) (where + is a binary operation defined as appending the element on the right to each set inside the element
+on the left).  Furthering this example, we can see that A[n] = A[n-1] U {n}.  And P(A[n]) = P(A[n-1]) U (P(A[n-1]) + n).</p>
+
+<p>Note that this is not a rigorous definition by any means, and that this is essentially proof by observation (which isn&rsquo;t a legitimate proof), but I basically just wanted to provide
+a convincing argument.  But I can assure that this holds for all n. So using this knowledge
+we can now form the following code:</p>
+{% endraw %}
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="keyword">def</span> <span class="function">powerset</span> n
+  <span class="keyword">if</span> block_given?
+    <span class="keyword">if</span> n &lt;= <span class="integer">0</span>
+      <span class="keyword">yield</span> []
+    <span class="keyword">else</span>
+      powerset(n-<span class="integer">1</span>) <span class="keyword">do</span> |item|
+        <span class="keyword">yield</span> item
+        <span class="keyword">yield</span> item + [n]
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">else</span>
+    sets = []
+    powerset(n) <span class="keyword">do</span> |item|
+      sets &lt;&lt; item
+    <span class="keyword">end</span>
+    sets
+  <span class="keyword">end</span>
+<span class="keyword">end</span></pre></div>
+</div>
+
+
+<p>And if we wanted to apply this argument to any general array, we could just as easily say</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">Array</span>
+  <span class="keyword">def</span> <span class="function">powerset</span>
+    <span class="keyword">if</span> block_given?
+      <span class="keyword">if</span> <span class="predefined-constant">self</span>.length == <span class="integer">0</span>
+        <span class="keyword">yield</span> []
+      <span class="keyword">else</span>
+        <span class="predefined-constant">self</span>[<span class="integer">0</span>..<span class="integer">-2</span>].powerset <span class="keyword">do</span> |item|
+          <span class="keyword">yield</span> item
+          <span class="keyword">yield</span> item + [<span class="predefined-constant">self</span>[<span class="integer">-1</span>]]
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+    <span class="keyword">else</span>
+      sets = []
+      <span class="predefined-constant">self</span>.powerset <span class="keyword">do</span> |item|
+        sets &lt;&lt; item
+      <span class="keyword">end</span>
+      sets
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></pre></div>
+</div>
+
+
+<p>So this is my current solution.  And note that I can now calculate (1..20).powerset in approximately 1.6 seconds, instead of the 45 seconds it took before.  It&rsquo;s a lot faster, now that it doesn&rsquo;t rely on trying to create combinations of arrays.</p>

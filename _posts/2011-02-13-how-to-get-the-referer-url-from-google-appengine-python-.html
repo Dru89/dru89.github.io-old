@@ -1,0 +1,36 @@
+---
+layout: post
+title: How to get the referer URL from Google AppEngine (Python)
+published: true
+---
+<p>I know this question has been seen a lot on the internet, and as far as I know no one else has really mentioned how to get the refering page from Google AppEngine.  Seeing how I&rsquo;m a nice guy and I just figured it out myself, I thought I would mention it to all of you.  Buried deep within their API, we can see that <a href="http://code.google.com/appengine/docs/python/tools/webapp/requestclass.html#Request">Request</a> class has an environ variable that we can access for all of that handy information.For example, let&rsquo;s assume you have a class called MainPage.  I&rsquo;m not going to write the whole python script for you, just the bits you need:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>...
+<span class="keyword">class</span> <span class="class">MainPage</span>(webapp.RequestHandler):
+  <span class="keyword">def</span> <span class="function">get</span>(<span class="predefined-constant">self</span>):
+    ...
+    referer = <span class="predefined-constant">self</span>.request.environ[<span class="string"><span class="delimiter">'</span><span class="content">HTTP_REFERER</span><span class="delimiter">'</span></span>] \
+              <span class="keyword">if</span> <span class="string"><span class="delimiter">'</span><span class="content">HTTP_REFERER</span><span class="delimiter">'</span></span> <span class="keyword">in</span> <span class="predefined-constant">self</span>.request.environ <span class="keyword">else</span>  <span class="predefined-constant">None</span>
+    ...
+...</pre></div>
+</div>
+
+
+<p>and apparently in Java it&rsquo;s as simple as</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>...
+public <span class="type">class</span> <span class="class">MainPage</span> <span class="directive">extends</span> HttpServlet {
+  <span class="directive">public</span> <span class="type">void</span> doGet(HttpServletRequest req, HttpServletResponse resp)
+        <span class="directive">throws</span> <span class="exception">IOException</span> {
+    ...
+    referer = req.getHeader(<span class="string"><span class="delimiter">'</span><span class="content">HTTP_REFERER</span><span class="delimiter">'</span></span>);
+    ...
+  }
+}
+...</pre></div>
+</div>
+
+
+<p>but I don&rsquo;t really use Java for GAE, so someone else will have to verify that, but it seems to be the case according to <a href="http://download.oracle.com/javaee/5/api/javax/servlet/http/HttpServletRequest.html#getHeader(java.lang.String)">Java&rsquo;s API</a></p>

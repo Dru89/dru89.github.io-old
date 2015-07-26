@@ -1,0 +1,18 @@
+markdown: rdiscount
+pygments: true
+server_port: 4000
+
+title: 'Programming & Productivity'
+url: 'http://blog.andrewhays.net'
+permalink: '/:year/:month/:day/:title/'
+website: 'http://www.andrewhays.net'
+
+author:
+    name: Andrew Hays
+    email: me@andrewhays.net
+    github: Dru89
+    twitter: Dru89
+    gravatar: http://www.gravatar.com/avatar/5b7d3122776b44cfb18ed7aa865804a1.png
+
+comments:
+    provider: facebook
