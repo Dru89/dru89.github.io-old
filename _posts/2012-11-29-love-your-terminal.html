@@ -1,0 +1,141 @@
+---
+layout: post
+title: Love Your Terminal
+published: true
+---
+<p>Like most developers (I assume), I spend the majority of my workspace staring at a terminal window.  You know, like this: <img src="http://i.imgur.com/2Nwpj.png" alt="Big black box with text and a flashing cursor" /></p>
+
+<p>When I&rsquo;m at work, I take up a whole screen with my terminal on my desktop.  My work laptop that I always carry with me has one open in OS X Full Screen Mode, as well.</p>
+
+<p>When you look at your terminal this much, it needs to be beautiful.  More than that, it needs to know you.  You need to have a history with it.  No, not like that.  Here are 5 things that you can do to make your terminal great.</p>
+
+<h3>1. Choose a Satisfying Color Scheme</h3>
+
+<p>You&rsquo;re looking at it all day.  Black and white.  Maybe some color if you&rsquo;re using grep.  Choose a color scheme that looks great and, perhaps more importantly, won&rsquo;t hurt your eyes if you have to look at the screen for a long period of time.</p>
+
+<p>I&rsquo;ve chosen Ethan Schoonover&rsquo;s <a href="http://ethanschoonover.com/solarized"><em>Solarized</em></a> color scheme.  There are forks of it for many different interfaces: <a href="https://github.com/altercation/solarized/tree/master/vim-colors-solarized">vim</a>, <a href="https://github.com/altercation/solarized/tree/master/emacs-colors-solarized">emacs</a>, <a href="https://github.com/altercation/solarized/tree/master/xresources-colors-solarized">X</a>, <a href="https://github.com/altercation/solarized/tree/master/visualstudio-colors-solarized">Visual Studios</a> and even <a href="http://eclipsecolorthemes.org/?view=theme&amp;id=1115">Eclipse</a> if you search for it.  It comes in light and dark variants, so if you prefer the &ldquo;black-on-white&rdquo; variant for terminals, you&rsquo;re covered as well.  The palate was designed so that the colors were soft and the contrast was easy to look at.</p>
+
+<p><img src="http://i.imgur.com/vHb5m.png" alt="Light and Dark Variants for Solarized" /></p>
+
+<p>If you have other good choices for colors, be sure to leave them in the comments.  The important thing here is that you find a color scheme that you love to look at.</p>
+
+<h3>2. Choose a Good Shell</h3>
+
+<p>What shell are you using?  Probably <a href="http://en.wikipedia.org/wiki/Bash_%28Unix_shell%29"><code>bash</code></a>, right?  Well, stop it.  Or don&rsquo;t.  Just know why you&rsquo;re using the shell that you have.  You have other options.  For instance, I use Z Shell (<code>zsh</code>).  It has just about every feature you could possibly imagine a shell to have.  If it doesn&rsquo;t have it baked in, someone&rsquo;s written it.</p>
+
+<p>There are tons of options out there, and if you like <code>bash</code>, that&rsquo;s fine.  Just know your options.  Wikipedia has a <a href="http://en.wikipedia.org/wiki/Comparison_of_command_shells">pretty good comparison</a> of different shells.</p>
+
+<p>If you do decide to go with <code>zsh</code>, I recommend installing <a href="https://github.com/robbyrussell/oh-my-zsh/">Oh My ZShell</a>.  It&rsquo;s the best extension to <code>zsh</code> that I&rsquo;ve seen.</p>
+
+<h3>3. Create a Great Prompt</h3>
+
+<p>What does your prompt normally look like?  It probably looks like this:
+<code>$</code></p>
+
+<p>Or maybe like this:
+<code>~/path/to/current/directory $</code></p>
+
+<p>Or maybe this:
+<code>username@~/path/to/current/directory $</code></p>
+
+<p>You have to stare at your command prompt all the time. You&rsquo;re constantly typing in commands, and the only useful information that your prompt is giving you is the directory that you&rsquo;re in.  Make your prompt work for you.  And make it pretty.  Here&rsquo;s a picture of my prompt:
+<img src="http://i.imgur.com/nmGlz.png" alt="My Command Prompt" /></p>
+
+<p>It&rsquo;s mostly taken from Steve Losh&rsquo;s <a href="http://stevelosh.com/blog/2010/02/my-extravagant-zsh-prompt/">Extravant Command Prompt</a>, with the modifications that:</p>
+
+<ol>
+<li>It shows me the time instead of battery life for my <code>$RPROMPT</code>.</li>
+<li>I don&rsquo;t use mercurial, so I only have git information.</li>
+<li>I like a space between the result and the next prompt, so I added a new line.</li>
+</ol>
+
+
+<p>I&rsquo;m not going to go into too much detail about how to set it up (Steve Losh&rsquo;s article does a pretty good job), but here&rsquo;s a gist of what my theme looks like:</p>
+
+<p><script src="https://gist.github.com/4164947.js"></script></p>
+
+<h3>4. Keep Track of Your History</h3>
+
+<p>You probably run a lot of commands.  You probably also run a lot of commands that you find online.  Commands that you forget&hellip; and then have to look up again a week later.  You should be keeping track of your history.  There&rsquo;s a couple of ways you can do that (and you should be doing all of them):</p>
+
+<h4>The <code>$HISTSIZE</code> variable</h4>
+
+<p>Setting your <code>$HISTSIZE</code> variable is the first and easiest step to getting everything set up the way you like it.  This stores your recent history in a place where your shell can find it.  I usually set the value to something fairly high, because it&rsquo;s nice to have that retention.  I have a line in my <code>.zshrc</code> file that looks like this:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>export HISTSIZE=100000 SAVEHIST=100000 HISTFILE=~/.zhistory</pre></div>
+</div>
+
+
+<p>You can access your history by browsing yourself or through some simple commands:</p>
+
+<h5>The <code>history</code> command</h5>
+
+<p><code>history</code> is probably the easiest way to go about it.  For instance, <code>history -1</code> will get you the last command.  <code>history -2</code> will get the last two, etc.  <code>history</code> by itself will output your entire history to the console.  So you could easily pipe in some other commands for something like &ldquo;I know I used <code>grep</code> and <code>wc</code> for something useful but I can&rsquo;t remember what it is.  Example:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>history | grep wc | grep grep
+# ...which, ironically I guess, would cause it to show up in your 
+# history if you ran it again.</pre></div>
+</div>
+
+
+<h5>Ctrl-R</h5>
+
+<p>Ctrl-R performs a reverse incremental search (or <code>reverse-i-search</code>) over your history.  This allows you to type something like <code>grep</code> and find your most recent command where you used grep.  If you keep hitting Ctrl-R, then you&rsquo;ll go through previous commands with that substring incrementally.</p>
+
+<h4>A special function to store <em>all</em> of your history.</h4>
+
+<p>I also have a special function in my <code>.zshrc</code> that stores <em>all</em> of my history into log files.  While <code>$HISTORY</code> is great, it only retails a certain amount of data.  That means that, over time, you&rsquo;ll begin to lose commands that you had run previously.</p>
+
+<p>I store all of my command history into log files separated by date.  There&rsquo;s <a href="http://motespace.com/blog/2011/03/12/saving-command-line-history/">different hooks</a> you can set up to have it work, but this is what mine looks like:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>function precmd() {
+    if [ &quot;$(id -u)&quot; -ne 0 ]; then
+        FULL_CMD_LOG=&quot;$HOME/.logs/zsh-history-$(date -u &quot;+%Y-%m-%d&quot;).log&quot;
+        echo &quot;$USER@`hostname`:`pwd` [$(date -u)] `\history -1`&quot; &gt;&gt; ${FULL_CMD_LOG}
+    fi
+}</pre></div>
+</div>
+
+
+<p>You&rsquo;ll want to run a <code>mkdir ~/.logs</code> before-hand to make sure that the directory exists, otherwise it will just complain. Now you&rsquo;ll wind up with log names like <code>/home/$USER/.logs/zsh-history-2012-11-29.log</code> and inside will be the full list of that day&rsquo;s commands.  Each command will look like:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>ahays@:&lt;host&gt;/home/ahays [Thu Nov 29 21:02:22 UTC 2012]   148  cat /path/to/my/favorite/textfile</pre></div>
+</div>
+
+
+<p>I&rsquo;m planning a followup to this post that shows how you can use that data to make your work day even more productive.  But for now, you&rsquo;ve got a lot of all the commands that you run, and that&rsquo;s very useful as well.</p>
+
+<h3>5. Make Aliases</h3>
+
+<p>If you&rsquo;re like me, you probably run 10% of the same commands for 90% of your day.  Aliases help you tone down the bulk of some of those commands.  For example, consider this alias your <code>.rc</code> file:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>alias ggpnp='git pull origin $(current_branch) &amp;&amp; git push origin $(current_branch)'</pre></div>
+</div>
+
+
+<p>This would allow you to call <code>ggpnp</code> instead of the original command.  You can set up as many of these as you want to make commands easier.  Aliases can also be useful for other reasons.  For instance,</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>alias sl=ls</pre></div>
+</div>
+
+
+<p>will autocorrect a quick spelling mistake <em>(Pro-tip: zsh handles spelling mistakes automatically, without aliases.)</em>  Also, if you always run <code>grep --color=auto</code> instead of <code>grep</code>, then</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>alias grep='grep --color=auto'</pre></div>
+</div>
+
+
+<p>will also work wonderfully.  Put in aliases that you know will help you throughout your work day.  Oh My ZShell also comes with a few handy aliases built-in.</p>
+
+<h3>Conclusion</h3>
+
+<p>As a developer, your terminal is probably one of your most important and well-used tools.  You should make sure that you&rsquo;re using it to its full potential.  Even more, you should make it fit your personal development style.</p>
+
+<p>If you have any other neat tips and tricks for perfecting your terminal, you should leave them in the comments.</p>
