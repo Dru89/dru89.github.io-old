@@ -1,0 +1,34 @@
+# Site settings
+title: Drew Hays – Blog
+email: drewshays@gmail.com
+description: > # this means to ignore newlines until "baseurl:"
+    This is yet another attempt at a personal website/blog for myself.
+    I've been trying to do this (unsuccessfully) for years.  Basically, they
+    all wind up being pretty unmaintained.  I'm hoping that a simple github pages
+    website will be easier for me to maintain.
+baseurl: "" # the subpath of your site, e.g. /blog/
+safe: true
+
+# Build settings
+markdown: redcarpet
+highlighter: pygments
+
+# Site variables
+url: "https://dru89.github.io" # the base hostname & protocol for your site
+twitter_username: Dru89
+github_username:  Dru89
+facebook_username: Dru89
+
+# Default post variables
+defaults:
+  -
+    scope:
+      path: ""
+      type: "post"
+    values:
+      layout: "post"
+  -
+    scope:
+      path: ""
+    values:
+      styles: []

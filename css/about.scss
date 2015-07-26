@@ -1,0 +1,33 @@
+---
+# Some frontmatter
+---
+@import "vars";
+
+$footnote-font-size: 80%;
+$footnote-color: lighten($text-color, 40%);
+$footnote-description-color: lighten($text-color, 20%);
+
+.about__profile-image {
+  float: left;
+  width: 150px;
+  padding: 0 10px 10px 0;
+}
+
+.about__footnote {
+  color: $footnote-color;
+  font-size: $footnote-font-size;
+}
+
+.about__footnotes-list {
+  margin-top: 2em;
+  list-style-type: none;
+  font-size: $footnote-font-size;
+}
+
+.footnotes__note-number {
+  color: $footnote-color;
+}
+
+.footnotes__footnote {
+  color: $footnote-description-color;
+}
